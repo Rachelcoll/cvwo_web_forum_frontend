@@ -1,10 +1,10 @@
 import { Link, useNavigate, useParams } from "react-router-dom"
-import { Navbar } from "../navbar";
+import { NavbarHome } from "../navbar";
 import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 
 interface state_props {
-    loggedInStatus: string,  
+    loggedInStatus: string,
     user: {[key: string]: string | number | undefined},
     setUser: Function, 
     setLoggedInStatus: Function
@@ -13,18 +13,20 @@ interface state_props {
 export const Profile = (props: state_props) => {
     const { id } = useParams();
 
+
     if (props.loggedInStatus === "user logged in") {
         if ( id === props.user.id?.toString()) {
             return (<div>
-                <div>
+                {/* <div>
                     <Navbar loggedInStatus={props.loggedInStatus} user={props.user} setUser={props.setUser} setLoggedInStatus={props.setLoggedInStatus} />
-                </div>
+                </div> */}
                 <div>
                     <h1>User: {props.user.email}</h1>
                     <h2>My posts</h2>
                     <MyArticles/>
                     <br/>
                     <h2>My games</h2>
+                    <MyGames />
                 </div>
             </div>)   
         } else {
@@ -38,6 +40,8 @@ export const Profile = (props: state_props) => {
         </div>
     }
 }
+
+
 
 const MyArticles = () => {
 
@@ -70,11 +74,47 @@ const MyArticles = () => {
             <button onClick={() => {
                 handleDelete(item.article.id)
                 window.location.reload()
-                window.location.reload()
-                window.location.reload()
                 }}>Delete</button>
         </div>
     })
     return DisplayArticle
     
+}
+
+interface Game {
+    id: number,
+    name:string,
+    release_date:string,
+    developers:string,
+    genre:string,
+    created_at:string,
+    updated_at:string
+}
+
+const MyGames = () => {
+    const {id} = useParams()
+    const [games, setGames] = useState<{game: Game}[]>([])
+    const getGames = () => {
+        axios.get(`http://localhost:3001/${id}/games`, {withCredentials: true})
+        .then(res => {
+            console.log(res)
+            setGames(res.data)
+        })
+        .catch(err => console.log(err))
+    }
+    useEffect(() => getGames, [])
+
+    const names = games.map(item => {
+        return item.game.name
+    })
+
+    const namesNoRepeat = [...new Set(names)]
+    const gameList = namesNoRepeat?.map(item => {
+        return (<div key={item}>
+            <ul>
+            <h3>{item}</h3>
+            </ul>
+        </div>)
+    })
+    return <div>{gameList}</div>
 }

@@ -1,76 +1,79 @@
-import { Navbar } from "../navbar"
-import { Moblie } from "./tags/moblie"
-import { Playstation } from "./tags/playstation"
-import { NS } from "./tags/NS"
 import { Link } from "react-router-dom"
 import { useEffect, useState } from "react"
 import axios, { AxiosResponse } from "axios"
-import { JsonObjectExpression } from "typescript"
+import { useSelector } from "react-redux"
 
-interface props {
-    loggedInStatus: string,
-    user: {[key: string]: string | number | undefined},
-    setUser: Function, 
-    setLoggedInStatus: Function
-}
-export const Dashboard = (props: props) => {
+export const Dashboard = () => {
 
-    
     return (<div>
-        <div>
-            <Navbar loggedInStatus={props.loggedInStatus} user={props.user} 
-            setUser={props.setUser} setLoggedInStatus={props.setLoggedInStatus}/>
-        </div>
-    
-        <div>
-            <h1>Dashboard</h1>
-            <DashboardNavbar />
-            <DashboardContent />
-        </div>
+        <Articles tag="all" />
     </div>)
 }
 
 const DashboardNavbar = () => {
     return (<div>
-        <h2>This is Dashboard Navbar.
-        Create new post, see posts under different tags, jump to rating area to rate games.</h2>
-        <Link to='/rating'>Rate games</Link>
-        <Link to='/createPost'>New Post</Link>
+        <h2>Welcome to EmagamE!</h2>
+        <h2>Create new post, see posts under different tags, jump to rating area to rate games.</h2>
+        <ul>
+            <Link to='/createPost'>New Post</Link>
+        </ul>
     </div>)
 }
 
-const DashboardContent = () => {
-    return (<div>
-        <h2>Here are the posts.</h2>
-        <Articles/>
-    </div>)
+interface tagProps {
+    tag: string
 }
 
+interface Article {
+    body: string,
+    created_at: string,
+    id: number,
+    tag: string,
+    title: string,
+    updated_at: string,
+    user_id: number
+}
 
-const Articles = () => {
-
-    const [articles, setArticles] = useState<any>()
+export const Articles = (props: tagProps) => {
+    const [articles, setArticles] = useState<Article[]>([])
     const handleTest = () => {
-        axios.get('http://localhost:3001/articles', {withCredentials: true})
-        .then((res: AxiosResponse) => {
-            setArticles(res.data)
-            console.log(res.data)
-
-        })
-        .catch(err=>console.log(err))
+        axios.get(`http://localhost:3001/articles/tag/${props.tag}`, { withCredentials: true })
+            .then((res: AxiosResponse) => {
+                setArticles(res.data)
+                console.log(res.data)
+            })
+            .catch(err => console.log(err))
     }
 
-    useEffect(() => handleTest(), [])
+    useEffect(() => {
+        handleTest()
+    }, [props.tag])
 
-    const FormatArticles = articles?.map((item: 
-        {article: {[key: string]: string | number | undefined}}) => {
-        return <div key={item.article.id}>
-            <h2>Titile: {item.article.title}</h2>
-            <h3>Tag: {item.article.tag}</h3>
-            <h3>Body: {item.article.body}</h3>
+    const FormatArticles = articles?.map(item => {
+        return <div key={item.id}>
+            <h2>Titile: {item.title}</h2>
+            <h3>Time: {item.updated_at}</h3>
+            <h3>Tag: {item.tag}</h3>
+            <h3>Body: {item.body}</h3>
+            <Link to={`/viewPost/${item.id}`}>Check</Link>
         </div>
     })
 
-    return FormatArticles
-    
+    return (<div>
+        <div>
+            <div>
+                <h1>Dashboard</h1>
+            </div>
+            <DashboardNavbar />
+            <div>
+                <h2>View By Tags</h2>
+                <Link to='/all'>All</Link>
+                <Link to='/mobile'>Mobile</Link>
+                <Link to='/console'>Console</Link>
+                <Link to='/steam'>Steam</Link>
+            </div>
+        </div>
+        {FormatArticles}
+        </div>)
+
 }

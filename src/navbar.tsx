@@ -8,7 +8,7 @@ interface state_props {
     setLoggedInStatus: Function
 }
 
-export const Navbar = (props: state_props) => {
+export const NavbarHome = (props: state_props) => {
     if (props.loggedInStatus === "user logged in") {
         return (
             <div>
@@ -22,6 +22,9 @@ export const Navbar = (props: state_props) => {
                         </li>
                         <li>
                             <Link to='/dashboard'>Dashboard</Link>
+                        </li>
+                        <li>
+                            <Link to='/games'>Games</Link>
                         </li>
                         <br/>
                         <li>

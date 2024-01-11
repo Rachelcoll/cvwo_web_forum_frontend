@@ -1,5 +1,4 @@
 import { ChangeEventHandler, FormEventHandler, useState } from "react"
-import { Navbar } from "../../navbar"
 import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
 
@@ -51,8 +50,6 @@ export const CreatePost = (props: props) => {
         </div>
     }
     return(<div>
-        <Navbar loggedInStatus={props.loggedInStatus} setLoggedInStatus={props.setLoggedInStatus} user={props.user}
-                setUser={props.setUser} />
         <div>
         <form onSubmit={handleSubmit}>
                 <div>
@@ -64,9 +61,9 @@ export const CreatePost = (props: props) => {
                         Choose a tag: 
                         <select value={tagOption} onChange={handleTagChange}>
                             <option value=''>Select...</option>
-                            <option value='Mobile'>Mobile</option>
-                            <option value='NS'>Switch</option>
-                            <option value='PlayStation'>PlayStation</option>
+                            <option value='mobile'>Mobile</option>
+                            <option value='console'>Console</option>
+                            <option value='steam'>Steam</option>
                         </select>
                     </label>
                 </div>

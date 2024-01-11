@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from "react-redux";
+import { setLoggedInStatus } from "../../store";
 
 interface input_props {
     handleSuccessfulAuth: Function,
@@ -9,6 +11,7 @@ interface input_props {
 
 export const Wrapper = (props:input_props) => {
     const navigate = useNavigate();
+    // const dispatch = useDispatch()
     return <Registration handleSuccessfulAuth={props.handleSuccessfulAuth} navigate={navigate} />
 }
 
@@ -37,9 +40,15 @@ class Registration extends Component<input_props2, reg_props> {
         }
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleChange = this.handleChange.bind(this)
+        // this.handleSuccessAuth = this.handleSuccessAuth.bind(this)
         
 
     }
+
+    // handleSuccessAuth = (data: object) => {
+    //     this.props.dispatch(setUser({user: data}))
+    //     this.props.dispatch(setLoggedInStatus({loggedInStatusValue: "user logged in" }))
+    // }
 
     handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
