@@ -2,6 +2,14 @@ import { Link } from "react-router-dom"
 import { useEffect, useState } from "react"
 import axios, { AxiosResponse } from "axios"
 import { useSelector } from "react-redux"
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Card from 'react-bootstrap/Card';
+import { Button, createTheme } from "@mui/material";
+import { ThemeProvider } from "react-bootstrap";
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+
 
 export const Dashboard = () => {
 
@@ -10,13 +18,20 @@ export const Dashboard = () => {
     </div>)
 }
 
+
 const DashboardNavbar = () => {
     return (<div>
-        <h2>Welcome to EmagamE!</h2>
-        <h2>Create new post, see posts under different tags, jump to rating area to rate games.</h2>
-        <ul>
-            <Link to='/createPost'>New Post</Link>
-        </ul>
+        <Navbar bg="light" data-bs-theme="light">
+            <Container>
+                <Navbar.Brand>Dashboard</Navbar.Brand>
+                <Navbar.Text>Create new post, see posts under different tags</Navbar.Text>
+                <div>
+                    <Nav className="justify-content-center" style={{ flex: 1 }}>
+                        <Nav.Link as={Link} to={'/createPost'}><Button>Create New Post</Button></Nav.Link>
+                    </Nav>
+                </div>
+            </Container>
+        </Navbar>
     </div>)
 }
 
@@ -48,32 +63,39 @@ export const Articles = (props: tagProps) => {
     useEffect(() => {
         handleTest()
     }, [props.tag])
-
-    const FormatArticles = articles?.map(item => {
+    const rev_articles = articles?.sort((a, b) => b.id - a.id)
+    const FormatArticles = rev_articles.map(item => {
         return <div key={item.id}>
-            <h2>Titile: {item.title}</h2>
-            <h3>Time: {item.updated_at}</h3>
-            <h3>Tag: {item.tag}</h3>
-            <h3>Body: {item.body}</h3>
-            <Link to={`/viewPost/${item.id}`}>Check</Link>
+            <Container>
+                <Row style={{ justifyContent: 'center' }}>
+                    <Card className="text-center">
+                    <Card.Footer className="text-muted">{item.updated_at.slice(0, 10)}</Card.Footer>
+                        <Card.Body>
+                            <Card.Title>{item.title}</Card.Title>
+                            <br/>
+                            <Card.Subtitle>Tag: {item.tag}</Card.Subtitle>
+                            <br/>
+                            <Card.Text>{item.body}</Card.Text>
+                            <Card.Link as={Link} to={`/viewPost/${item.id}`} ><Button>View</Button></Card.Link>
+                        </Card.Body>
+                    </Card>
+                </Row>
+            </Container>
         </div>
     })
 
     return (<div>
         <div>
-            <div>
-                <h1>Dashboard</h1>
-            </div>
             <DashboardNavbar />
             <div>
-                <h2>View By Tags</h2>
-                <Link to='/all'>All</Link>
-                <Link to='/mobile'>Mobile</Link>
-                <Link to='/console'>Console</Link>
-                <Link to='/steam'>Steam</Link>
+                <Link to='/all'><Button>All</Button></Link>
+                <Link to='/mobile'><Button>Mobile</Button></Link>
+                <Link to='/console'><Button>Console</Button></Link>
+                <Link to='/steam'><Button>Steam</Button></Link>
             </div>
+
         </div>
         {FormatArticles}
-        </div>)
+    </div>)
 
 }

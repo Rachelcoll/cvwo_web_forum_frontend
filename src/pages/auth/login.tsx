@@ -1,13 +1,16 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import { Button } from "react-bootstrap";
 
 interface input_props {
     handleSuccessfulAuth: Function,
 
 }
 
-export const WrapperLogin = (props:input_props) => {
+export const WrapperLogin = (props: input_props) => {
     const navigate = useNavigate();
     return <Login handleSuccessfulAuth={props.handleSuccessfulAuth} navigate={navigate} />
 }
@@ -34,9 +37,6 @@ class Login extends Component<input_props2, reg_props> {
             RegistrationErrors: "",
         }
         this.handleSubmit = this.handleSubmit.bind(this)
-        this.handleChange = this.handleChange.bind(this)
-        
-
     }
 
     handleSubmit = (event: React.FormEvent) => {
@@ -47,31 +47,48 @@ class Login extends Component<input_props2, reg_props> {
                 password: this.state.password
             }
         }, { withCredentials: true })
-        .then(res => {
-            // console.log('login res', res)
-            this.props.handleSuccessfulAuth(res.data)
-            this.props.navigate('/dashboard', {replace: true})
-            window.location.reload()
-            
-        })
-        .catch(error => console.log("login error", error))
+            .then(res => {
+                // console.log('login res', res)
+                this.props.handleSuccessfulAuth(res.data)
+                this.props.navigate('/dashboard', { replace: true })
+                window.location.reload()
+
+            })
+            .catch(error => console.log("login error", error))
 
     }
 
-    handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        event.preventDefault();
-        this.setState({
-            ...this.state, [event.target.name]: event.target.value
-        })
-    }
     render(): React.ReactNode {
         return (<div>
-            <form onSubmit={this.handleSubmit}>
-                <input type="email" name="email" onChange={this.handleChange} value={this.state.email} placeholder="Email" required />
-                <input type="password" name="password" onChange={this.handleChange} value={this.state.password} placeholder="Password" required />
-                <button type="submit">Login</button>
-            </form>
-        </div>)
+            <Box
+                component="form"
+                sx={{
+                    '& .MuiTextField-root': { m: 1, width: '25ch' },
+                }}
+                noValidate
+                autoComplete="off"
+                onSubmit={this.handleSubmit}
+            >
+                <div>
+                    <TextField
+                        required
+                        id="outlined-required"
+                        label="Email"
+                        value={this.state.email}
+                        onChange={e => this.setState({ email: e.target.value })}
+                    />
+                    <TextField
+                        id="outlined-password-input"
+                        label="Password"
+                        type="password"
+                        value={this.state.password}
+                        onChange={e => this.setState({ password: e.target.value })}
+                    />
+                </div>
+                <Button type="submit">Login</Button>
+            </Box>
+        </div>
+        )
     }
 }
 

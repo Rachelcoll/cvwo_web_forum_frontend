@@ -1,10 +1,16 @@
 import axios, { AxiosInstance } from "axios"
 import { useState } from "react"
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import { Button } from "@mui/material";
+import { Col, Row } from "react-bootstrap";
+
 
 interface comment_prop {
     comment_id: number,
-    isPopUp: boolean,
-    setIsPopUp: Function,
+    // isPopUp: boolean,
+    // setIsPopUp: Function,
     article_id: string | undefined
 }
 
@@ -20,16 +26,21 @@ export const EditComment = (props: comment_prop) => {
             comment: {
                 content: content
             }
-        }, {withCredentials: true})
-        .then((res: any) => {
-            window.location.reload()
-        })
-        .catch(err => console.log(err))
-        props.setIsPopUp(false)
+        }, { withCredentials: true })
+            .then((res: any) => {
+                window.location.reload()
+            })
+            .catch(err => console.log(err))
+        // props.setIsPopUp(false)
     }
-    return (<div>
-        <h3>Edit Comment</h3>
-        <input onChange={handleChange} value={content} placeholder="New Edit" />
-        <button onClick={handleSave}>Save</button>
-    </div>)
+    return (
+        <Box
+            sx={{
+                width: 500,
+                maxWidth: '100%',
+            }}
+        >
+        <TextField fullWidth label="Edit comment" id="fullWidth" onChange={handleChange} value={content} placeholder="New Edit" />
+        <Button onClick={handleSave}>Save</Button>
+        </Box>)
 }

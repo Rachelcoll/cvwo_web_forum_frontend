@@ -14,6 +14,11 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import { ViewGames } from './pages/Games/viewGames';
 import { Game } from './pages/Games/game'
+import { Test } from './test';
+// import '@fontsource/roboto/300.css';
+// import '@fontsource/roboto/400.css';
+// import '@fontsource/roboto/500.css';
+// import '@fontsource/roboto/700.css';
 
 function App() {
 
@@ -57,6 +62,7 @@ function App() {
           <Route path="/steam" element={<Articles tag="steam" />} />
           <Route path="/games" element={<ViewGames />} />
           <Route path='/game/:id' element={React.createElement(Game, {user})} />
+          <Route path='/test' element={<Test />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -1,11 +1,12 @@
 import { ChangeEventHandler, FormEventHandler, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
+import { Container, Form, Row, Col, Button } from "react-bootstrap"
 
 interface props {
     loggedInStatus: string,
-    user: {[key: string]: string | number | undefined},
-    setUser: Function, 
+    user: { [key: string]: string | number | undefined },
+    setUser: Function,
     setLoggedInStatus: Function
 }
 
@@ -16,7 +17,7 @@ export const CreatePost = (props: props) => {
     const navigate = useNavigate()
 
 
-    const handleSubmit = (event:React.FormEvent) => {
+    const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault()
         axios.post('http://localhost:3001/articles', {
             article: {
@@ -24,12 +25,12 @@ export const CreatePost = (props: props) => {
                 tag: tagOption,
                 body: body
             }
-        }, {withCredentials: true})
-        .then(res => {
-            console.log('post response', res)
-            navigate('/dashboard')
+        }, { withCredentials: true })
+            .then(res => {
+                console.log('post response', res)
+                navigate('/dashboard')
             })
-        .catch(err => console.log(err))
+            .catch(err => console.log(err))
     }
 
     const handleTagChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -38,7 +39,7 @@ export const CreatePost = (props: props) => {
     const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value)
     }
-    
+
     const handleBodyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setBody(event.target.value)
     }
@@ -49,31 +50,43 @@ export const CreatePost = (props: props) => {
             <Link to='/'>Login</Link>
         </div>
     }
-    return(<div>
-        <div>
-        <form onSubmit={handleSubmit}>
-                <div>
-                    <input placeholder="Title" type="text" value={title} onChange={handleTitleChange} />
-                </div>
-                <div>
-                    <br/>
-                    <label>
-                        Choose a tag: 
-                        <select value={tagOption} onChange={handleTagChange}>
-                            <option value=''>Select...</option>
-                            <option value='mobile'>Mobile</option>
-                            <option value='console'>Console</option>
-                            <option value='steam'>Steam</option>
-                        </select>
-                    </label>
-                </div>
-                <div>
-                    <br/>
-                    <input placeholder="Content" type="text" value={body} onChange={handleBodyChange} />
-                </div>
-                <br/>
-                <button type="submit">Post</button>
-            </form>
-            </div>
+    return (<div>
+        <Container className="mt-4">
+            <Form onSubmit={handleSubmit}>
+                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" as={Row}>
+                    <Form.Label column sm={2}>Title</Form.Label>
+                    <Col sm={10}>
+                        <Form.Control type="text" placeholder="Title" value={title} onChange={handleTitleChange} />
+                    </Col>
+                </Form.Group>
+                <Form.Group as={Row}>
+                    <Form.Label column sm={2}>Tag</Form.Label>
+                    <Col sm={10} >
+                        <Form.Select aria-label="Select tag" value={tagOption} onChange={handleTagChange}>
+                            <option>select a tag</option>
+                            <option value="mobile">mobile</option>
+                            <option value="console">console</option>
+                            <option value="steam">steam</option>
+                        </Form.Select>
+                    </Col>
+                </Form.Group>
+                <br />
+                <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1" as={Row}>
+                    <Form.Label column sm={2}>Content</Form.Label>
+                    <Col sm={10}>
+                        <Form.Control as="textarea" type="text" value={body} onChange={handleBodyChange} rows={3} placeholder="What do you want to say..." />
+                    </Col>
+                </Form.Group>
+                <Row>
+                    <Col xs={{span:3, offset:3}}>
+                        <Link to="/dashboard"><Button variant="outline-dark">Back</Button></Link>
+                    </Col>
+                    <Col xs={{span: 3}}>
+                        <Button variant="outline-dark" type="submit">Post</Button>
+                    </Col>
+                </Row>
+            </Form>
+        </Container>
+
     </div>)
 }
