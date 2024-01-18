@@ -10,8 +10,8 @@ import { CreatePost } from './pages/Articles/createPost';
 import { EditPost } from './pages/Articles/editPost';
 import { ViewPost } from './pages/Articles/viewPost';
 import { Articles } from './pages/dashboard';
-import { Provider } from 'react-redux';
-import { store } from './store';
+// import { Provider } from 'react-redux';
+// import { store } from './store';
 import { ViewGames } from './pages/Games/viewGames';
 import { Game } from './pages/Games/game'
 import { Test } from './test';
