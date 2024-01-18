@@ -11,6 +11,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Container, Row, Col, Form, Button as Btn } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import Rating from '@mui/material/Rating';
 
 const bull = (
     <Box
@@ -60,12 +61,9 @@ export const Game = (props: { user: { [key: string]: string | number | undefined
     const [reviews, setReviews] = useState<Res[]>([])
     const [avgScore, setAvgScore] = useState<string>('')
     const [review, setReview] = useState<string>('')
-    const [score, setScore] = useState<number>(0)
+    const [score, setScore] = useState<number | null>(0)
     const [game, setGame] = useState<Game>()
 
-    const scoreHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setScore(parseInt(e.target.value))
-    }
 
     const handleReviewChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setReview(e.target.value)
@@ -119,14 +117,14 @@ export const Game = (props: { user: { [key: string]: string | number | undefined
                     <Container className="align-items-center justify-content-center">
                         <CardContent>
                             <Typography variant="h5" component="div">
-                            {item.review.game_review}
+                                {item.review.game_review}
                             </Typography>
                             <Typography variant="body1">
-                            Score given: {item.review.score}
+                                Score given: {item.review.score}
                             </Typography>
                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
                                 time: {item.review.created_at.slice(0, 16)}
-                                <br/>
+                                <br />
                                 By: {item.user.email}
                             </Typography>
                             {props.user.id === item.review.user_id
@@ -179,21 +177,27 @@ export const Game = (props: { user: { [key: string]: string | number | undefined
                     </Form.Group>
                     <Form.Group as={Row}>
                         <Form.Label column sm={2}>Game Score</Form.Label>
-                        <Col sm={10} >
-                            <Form.Select aria-label="Select tag" value={score} onChange={scoreHandler}>
-                                <option value={5}>5</option>
-                                <option value={4}>4</option>
-                                <option value={3}>3</option>
-                                <option value={2}>2</option>
-                                <option value={1}>1</option>
-                                <option value={0}>0</option>
-                            </Form.Select>
+                        <Col sm={10} className="text-left">
+                            <Box
+                                textAlign='left'
+                                sx={{
+                                    '& > legend': { mt: 2 },
+                                }}
+                            >
+                                <Rating
+                                    name="simple-controlled"
+                                    value={score}
+                                    onChange={(event, newValue) => {
+                                        setScore(newValue);
+                                    }}
+                                />
+                            </Box>
                         </Col>
                     </Form.Group>
                     <Row>
                         <Row className="mt-4">
                             <Col>
-                            <Btn variant="outline-dark" type="submit">Post</Btn>
+                                <Btn variant="outline-dark" type="submit">Post</Btn>
                             </Col>
                         </Row>
                         <Row className="mt-4">

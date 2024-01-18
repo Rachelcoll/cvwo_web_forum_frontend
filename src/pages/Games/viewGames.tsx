@@ -7,7 +7,7 @@ import { Container, Row, Col, CardTitle } from "react-bootstrap";
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import { Button as Btn, CardContent } from "@mui/material";
-import { red } from "@mui/material/colors";
+import Rating from '@mui/material/Rating';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -58,6 +58,9 @@ export const ViewGames = () => {
             <Card>
             <CardContent>{item.name}</CardContent>   
             <CardContent style={{color: '#e57373'}}>{item.avg_score}</CardContent>
+            <CardContent>
+                <Rating name="read-only" value={parseInt(item.avg_score)} readOnly />
+            </CardContent>
             <Link to={`/game/${item.id}`}><Btn>View</Btn></Link>
             </Card>
         </div>
