@@ -69,7 +69,7 @@ export const Articles = (props: tagProps) => {
             <Container>
                 <Row style={{ justifyContent: 'center' }}>
                     <Card className="text-center">
-                    <Card.Footer className="text-muted">{item.updated_at.slice(0, 10)}</Card.Footer>
+                    <Card.Footer className="text-muted">{item.created_at.slice(0, 10)}</Card.Footer>
                         <Card.Body>
                             <Card.Title>{item.title}</Card.Title>
                             <br/>
